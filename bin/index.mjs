@@ -80,6 +80,7 @@ if (process.argv[2] === "init") {
     process.argv.length > 3 ? process.argv[3] : "nuxt-app"
   );
   const PARENT_DIRECTORY = process.cwd();
+  console.log(__dirname);
   const COMPOSE_FILE = path.join(
     __dirname,
     "docker",
