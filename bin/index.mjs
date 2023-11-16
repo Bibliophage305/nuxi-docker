@@ -6,6 +6,8 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 import * as path from "path";
 
+console.log(process.argv);
+
 function appIsRunning() {
   // If `docker compose ps -q` returns nothing then no containers are running, and
   // nothing should execute unless it's being passed to the docker-compose binary
