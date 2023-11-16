@@ -6,8 +6,6 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 import * as path from "path";
 
-console.log(process.argv);
-
 function appIsRunning() {
   // If `docker compose ps -q` returns nothing then no containers are running, and
   // nothing should execute unless it's being passed to the docker-compose binary
@@ -53,17 +51,21 @@ function help() {
   process.exit(0);
 }
 
+if (process.argv.length < 3) {
+  help();
+}
+
+if (process.argv[2] == "help") {
+  help();
+}
+
 function composeFileExists(composeFilename) {
   // Check if the Docker Compose file exists
   if (!existsSync(composeFilename)) {
     console.error(`Unable to find Docker Compose file: '${composeFilename}'`);
     process.exit(1);
-  }
-}
-
-if (process.argv.length < 3) {
-  help();
-}
+  }  
+}  
 
 const __dirname = path.join(fileURLToPath(import.meta.url), "..", "..");
 
@@ -82,7 +84,6 @@ if (process.argv[2] === "init") {
     process.argv.length > 3 ? process.argv[3] : "nuxt-app"
   );
   const PARENT_DIRECTORY = process.cwd();
-  console.log(__dirname);
   const COMPOSE_FILE = path.join(
     __dirname,
     "docker",
@@ -147,10 +148,6 @@ const base_args = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];
 const args = [];
 
 switch (process.argv[2]) {
-  // Help!
-  case "help":
-    help();
-    break;
 
   // Intercept some nuxi commands and proxy them to the nuxi cli on the app container
   case "add":
