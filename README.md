@@ -1,7 +1,3 @@
-Certainly! Here's an updated version of the README with a section added at the top to explain the project creation functionality using `npx nuxi-docker init <PROJECT>`:
-
----
-
 # Nuxi-Docker
 
 Nuxi-Docker is a preconfigured Docker environment tailored to streamline interaction with Nuxt.js projects using the Nuxi CLI.
