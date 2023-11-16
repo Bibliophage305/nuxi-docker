@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+
+    environment:
+      PGPASSWORD: '${POSTGRES_PASSWORD:-postgres}'
+      POSTGRES_DB: '${POSTGRES_DATABASE:-postgres}'
+      POSTGRES_USER: '${POSTGRES_USER:-postgres}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-postgres}'
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes: 
+      - postgres:/var/lib/postgresql/data
+  
+  nuxt-app:
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    user: "${UID:-1000}:${GID:-1000}"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    ports:
+      - "3000:3000"
+      - "24678:24678"
+    volumes:
+      - .:/src
+
+volumes:
+  postgres:
+    driver: local
