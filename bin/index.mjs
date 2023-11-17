@@ -6,16 +6,6 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 import * as path from "path";
 
-function appIsRunning() {
-  // If `docker compose ps -q` returns nothing then no containers are running, and
-  // nothing should execute unless it's being passed to the docker-compose binary
-  if (execSync(`${DOCKER_COMPOSE} ps -q`).toString().length == 0) {
-    console.error("The container is not running.");
-    console.error("Bring the container up with npx nuxi-docker up -d");
-    process.exit(1);
-  }
-}
-
 function help() {
   console.log("nuxi-docker - a preconfigured docker environment to interact with nuxt projects with the nuxi cli");
   console.log("");
@@ -65,9 +55,7 @@ function composeFileExists(composeFilename) {
     console.error(`Unable to find Docker Compose file: '${composeFilename}'`);
     process.exit(1);
   }  
-}  
-
-const __dirname = path.join(fileURLToPath(import.meta.url), "..", "..");
+}
 
 // Define Docker Compose command prefix
 let DOCKER_COMPOSE;
@@ -78,8 +66,19 @@ try {
   DOCKER_COMPOSE = "docker-compose";
 }
 
+const __dirname = path.join(fileURLToPath(import.meta.url), "..", "..");
+const DOCKERFILE_DIRECTORY = path.join(__dirname, "docker");
+
+const env_variables = [
+  `DOCKERFILE_DIRECTORY="${DOCKERFILE_DIRECTORY}"`,
+];
+
 // init command
 if (process.argv[2] === "init") {
+  console.log("welcome to nuxi-docker")
+  console.log("")
+  console.log("building the init container then passing you to nuxi init")
+  console.log("")
   const PROJECT_DIRECTORY = path.join(
     process.argv.length > 3 ? process.argv[3] : "nuxt-app"
   );
@@ -91,25 +90,25 @@ if (process.argv[2] === "init") {
   );
   composeFileExists(COMPOSE_FILE);
 
-  const env_variables = [
+  env_variables.push(
     `PROJECT_DIRECTORY="${PROJECT_DIRECTORY}"`,
     `PARENT_DIRECTORY="${PARENT_DIRECTORY}"`,
     `DOCKER_USER_UID=$UID`,
     `DOCKER_USER_GID=$GID`,
-  ];
+  );
 
-  const base_args = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];
+  const BASE_ARGS = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];
 
   try {
     execSync(
-      `${env_variables.join(" ")} ${base_args.join(" ")} run nuxt-app-init`,
+      `${env_variables.join(" ")} ${BASE_ARGS.join(" ")} run nuxt-app-init`,
       { stdio: "inherit" }
     );
   } catch (err) {
     throw err;
   }
 
-  for (const filename of ["docker-compose.yml", "Dockerfile", ".env"]) {
+  for (const filename of ["docker-compose.yml", ".env"]) {
     copyFile(
       path.join(__dirname, "docker", filename),
       path.join(PARENT_DIRECTORY, PROJECT_DIRECTORY, filename),
@@ -144,8 +143,19 @@ const COMPOSE_FILE = "docker-compose.yml";
 // Check if the Docker Compose file exists
 composeFileExists(COMPOSE_FILE);
 
-const base_args = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];
+const BASE_ARGS = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];
+
 const args = [];
+
+function appIsRunning() {
+  // If `docker compose ps -q` returns nothing then no containers are running, and
+  // nothing should execute unless it's being passed to the docker-compose binary
+  if (execSync(`${env_variables.join(" ")} ${BASE_ARGS.join(" ")} ps -q`).toString().length == 0) {
+    console.error("The container is not running.");
+    console.error("Bring the container up with npx nuxi-docker up -d");
+    process.exit(1);
+  }
+}
 
 switch (process.argv[2]) {
 
@@ -245,11 +255,11 @@ switch (process.argv[2]) {
 
 // Run Docker Compose with the defined arguments
 try {
-  execSync(`${base_args.join(" ")} ${args.join(" ")}`, { stdio: "inherit" });
+  execSync(`${env_variables.join(" ")} ${BASE_ARGS.join(" ")} ${args.join(" ")}`, { stdio: "inherit" });
 } catch (err) {
   console.error("");
   console.error("nuxi-docker: failed to execute this command:");
-  console.error(`    ${base_args.join(" ")} ${args.join(" ")}`);
+  console.error(`    ${BASE_ARGS.join(" ")} ${args.join(" ")}`);
   console.error("");
   console.error("npx nuxi-docker help for a list of valid commands");
 }

@@ -1,10 +1,10 @@
 version: "3.8"
 services:
   nuxt-app-init:
-    user: ${DOCKER_USER_UID}:${DOCKER_USER_GID}
+    user: "${DOCKER_USER_UID}:${DOCKER_USER_GID}"
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: "${DOCKERFILE_DIRECTORY}"
     volumes:
-      - ${PARENT_DIRECTORY}:/src
+      - "${PARENT_DIRECTORY}:/src"
     command: "npx nuxi init ${PROJECT_DIRECTORY}"
