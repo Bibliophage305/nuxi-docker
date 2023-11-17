@@ -7,7 +7,8 @@ RUN apk --no-cache add ca-certificates wget \
     && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-2.28-r0.apk \
     && apk add --no-cache --force-overwrite glibc-2.28-r0.apk
 
-RUN npm install -g pnpm bun nuxi
+RUN npm install -g pnpm bun nuxi \
+    && npm cache clean --force
 
 RUN mkdir -p /src
 WORKDIR /src
