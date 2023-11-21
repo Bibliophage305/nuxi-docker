@@ -2,7 +2,9 @@
 
 Nuxi-Docker is a preconfigured Docker environment tailored to streamline interaction with Nuxt.js projects using the Nuxi CLI.
 
-## Creating a New Project
+## Installation
+
+### Creating a New Project
 
 To create a new Nuxt.js project and set it up within the Nuxi-Docker environment:
 
@@ -11,6 +13,18 @@ npx nuxi-docker init <PROJECT>
 ```
 
 This command automates project creation by executing `nuxi init <PROJECT>` and copying the necessary Docker configurations for the new project.
+
+### Installing Nuxi-Docker in an Existing Nuxt Project
+
+If you already have an existing Nuxt.js project and want to integrate it with the Nuxi-Docker environment, you can use the `install` command:
+
+```bash
+npx nuxi-docker install
+```
+
+This command sets up the necessary configurations and Docker environment within your current Nuxt project.
+
+## Usage
 
 ### Commands Proxied to Nuxi
 
@@ -44,7 +58,7 @@ To avoid collision with Docker Compose's `build`, use `nuxi-build` to run Nuxi's
 npx nuxi-docker nuxi-build [args]
 ```
 
-### Binaries Proxied to App Container
+### Commands proxied to binaries in the app container
 
 The commands `nuxi`, `nuxt`, `node`, `npm`, `npx`, `yarn`, `pnpm`, `pnpx`, `bun`, and `bunx` are proxied to the binaries in the app container. Use them by running:
 

@@ -7,37 +7,56 @@ import { fileURLToPath } from "url";
 import * as path from "path";
 
 function help() {
-  console.log("nuxi-docker - a preconfigured docker environment to interact with nuxt projects with the nuxi cli");
+  console.log("");
+  console.log("nuxi-docker - a preconfigured docker environment to interact with Nuxt projects using the Nuxi CLI");
   console.log("");
   console.log("QUICK START");
-  console.log("to bring the containers up:");
+  console.log("Start a new project:");
+  console.log("    npx nuxi-docker init <PROJECT>");
+  console.log("Or install in an existing project:");
+  console.log("    npx nuxi-docker install");
+  console.log("Bring up the containers:");
   console.log("    npx nuxi-docker up -d");
   console.log("");
-  console.log("to start the dev site:");
+  console.log("Start the development site:");
   console.log("    npx nuxi-docker dev");
   console.log("");
-  console.log("add, analyze, build-module, cleanup, dev, devtools, generate, info, init, prepare, preview, typecheck, and upgrade are proxied straight to nuxi in the app container:");
+  console.log("INITIALISATION");
+  console.log("To create a new Nuxt.js project and set it up within the Nuxi-Docker environment:");
+  console.log("    npx nuxi-docker init <PROJECT>");
+  console.log("");
+  console.log("INSTALLATION");
+  console.log("To integrate Nuxi-Docker into an existing Nuxt.js project:");
+  console.log("    npx nuxi-docker install");
+  console.log("");
+  console.log("COMMANDS PROXIED TO NUXI");
+  console.log("The following commands are proxied directly to Nuxi in the app container:");
+  console.log("    add, analyze, build-module, cleanup, dev, devtools, generate, info, init, prepare, preview, typecheck, and upgrade");
+  console.log("Usage:");
   console.log("    npx nuxi-docker <COMMAND> [args]");
   console.log("");
-  console.log("nuxi-build (to avoid collision with docker-compose build) runs nuxi build in the app container:");
+  console.log("NUXI BUILD");
+  console.log("To run Nuxi's build command in the app container (useful to avoid collision with docker-compose build):");
   console.log("    npx nuxi-docker nuxi-build [args]");
   console.log("");
-  console.log("nuxi, nuxt, node, npm, npx, yarn, pnpm, pnpx, bun, bunx are proxied to the binaries in the app container:");
+  console.log("COMMANDS PROXIED TO BINARIES IN THE APP CONTAINER");
+  console.log("The commands 'nuxi', 'nuxt', 'node', 'npm', 'npx', 'yarn', 'pnpm', 'pnpx', 'bun', and 'bunx' are proxied to the binaries in the app container.");
+  console.log("Usage:");
   console.log("    npx nuxi-docker <COMMAND> [args]");
   console.log("");
-  console.log("shell/bash initiates a terminal in the app container:");
+  console.log("SHELL ACCESS");
+  console.log("Initiate a terminal in the app container:");
   console.log("    npx nuxi-docker shell");
   console.log("");
-  console.log("postgres proxies commands to the postgres container:");
+  console.log("POSTGRES OPERATIONS");
+  console.log("Commands prefixed with 'postgres' are forwarded to the Postgres container:");
   console.log("    npx nuxi-docker postgres [args]");
-  console.log("");
-  console.log("postgres shell/bash initiates a terminal in the postgres container:");
   console.log("    npx nuxi-docker postgres shell");
-  console.log("");
-  console.log("psql opens a postgres cli terminal in the postgres container:");
   console.log("    npx nuxi-docker psql");
   console.log("");
-  console.log("anything else is proxied to docker-compose");
+  console.log("DOCKER COMPOSE PROXY");
+  console.log("Any other command is proxied to Docker Compose.");
+  console.log("");
   process.exit(0);
 }
 
@@ -73,8 +92,50 @@ const env_variables = [
   `DOCKERFILE_DIRECTORY="${DOCKERFILE_DIRECTORY}"`,
 ];
 
+// install command
+if (process.argv[2] == "install") {
+  const PROJECT_DIRECTORY = process.cwd();
+  const COMPOSE_FILENAME = "docker-compose.yml";
+  const files_to_copy = [];
+  if (existsSync(path.join(PROJECT_DIRECTORY, COMPOSE_FILENAME))) {
+    console.log(`${COMPOSE_FILENAME} already exists in this project`);
+    process.exit(1);
+  }
+  files_to_copy.push(COMPOSE_FILENAME);
+  if (existsSync(path.join(PROJECT_DIRECTORY, ".env"))) {
+    console.log(".env already exists in this project, skipping");
+  } else {
+    files_to_copy.push(".env");
+  }
+
+  for (const filename of files_to_copy) {
+    copyFile(
+      path.join(__dirname, "docker", filename),
+      path.join(PROJECT_DIRECTORY, filename),
+      (err) => {
+        if (err) throw err;
+      }
+    );
+  }
+
+  console.log("--------------------------------------");
+  console.log("");
+  console.log("install complete!");
+  console.log("");
+  console.log("to bring the containers up:");
+  console.log("    npx nuxi-docker up -d");
+  console.log("");
+  console.log("to start the dev site:");
+  console.log("    npx nuxi-docker dev");
+  console.log("");
+  console.log("--------------------------------------");
+
+  process.exit(0);
+}
+
 // init command
 if (process.argv[2] === "init") {
+  console.log("")
   console.log("welcome to nuxi-docker")
   console.log("")
   console.log("building the init container then passing you to nuxi init")
