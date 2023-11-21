@@ -1,6 +1,6 @@
 {
   "name": "nuxi-docker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A preconfigured docker environment and cli tool for managing Nuxt.js projects",
   "main": "index.js",
   "bin": {
@@ -10,5 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github:Bibliophage305/nuxi-docker"
   }
 }
