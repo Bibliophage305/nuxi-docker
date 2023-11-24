@@ -19,7 +19,7 @@ services:
       - postgres
     links:
       - postgres
-    user: "${UID:-1000}:${GID:-1000}"
+    user: "${DOCKER_USER_ID}:${DOCKER_GROUP_ID}"
     build:
       context: "${DOCKERFILE_DIRECTORY}"
       dockerfile: Dockerfile
@@ -28,7 +28,7 @@ services:
       - "3000:3000"
       - "24678:24678"
     volumes:
-      - .:/src
+      - .:/home/node/src
 
 volumes:
   postgres:

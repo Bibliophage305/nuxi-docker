@@ -6,5 +6,5 @@ services:
       context: "${DOCKERFILE_DIRECTORY}"
       dockerfile: "Dockerfile"
     volumes:
-      - "${PARENT_DIRECTORY}:/src"
+      - "${PARENT_DIRECTORY}:/home/node/src"
     command: "npx nuxi init ${PROJECT_DIRECTORY}"

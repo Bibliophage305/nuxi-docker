@@ -90,6 +90,8 @@ const DOCKERFILE_DIRECTORY = path.join(__dirname, "docker");
 
 const env_variables = [
   `DOCKERFILE_DIRECTORY="${DOCKERFILE_DIRECTORY}"`,
+  `DOCKER_USER_UID=$UID`,
+  `DOCKER_USER_GID=$GID`,
 ];
 
 // install command
@@ -154,8 +156,6 @@ if (process.argv[2] === "init") {
   env_variables.push(
     `PROJECT_DIRECTORY="${PROJECT_DIRECTORY}"`,
     `PARENT_DIRECTORY="${PARENT_DIRECTORY}"`,
-    `DOCKER_USER_UID=$UID`,
-    `DOCKER_USER_GID=$GID`,
   );
 
   const BASE_ARGS = [DOCKER_COMPOSE, "-f", COMPOSE_FILE];

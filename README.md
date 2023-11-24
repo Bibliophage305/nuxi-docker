@@ -1,6 +1,6 @@
 # Nuxi-Docker
 
-Nuxi-Docker is a preconfigured Docker environment tailored to streamline interaction with Nuxt.js projects using the Nuxi CLI.
+Nuxi-Docker is a preconfigured Docker development environment tailored to streamline interaction with Nuxt.js projects using the Nuxi CLI.
 
 ## Installation
 
