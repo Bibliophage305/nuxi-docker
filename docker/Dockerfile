@@ -3,8 +3,14 @@ FROM node:20-bullseye-slim
 ARG DOCKER_USER_UID
 ARG DOCKER_USER_GID
 
-RUN groupmod -g $DOCKER_USER_GID node
-RUN usermod -u $DOCKER_USER_UID -g $DOCKER_USER_GID node
+COPY change_gid.sh /usr/local/bin/
+
+# If the GID is in use, reassign it with a terrifying script
+RUN chmod +x /usr/local/bin/change_gid.sh \
+    && /usr/local/bin/change_gid.sh "$DOCKER_USER_GID"
+
+RUN groupmod -g $DOCKER_USER_GID node \
+    && usermod -u $DOCKER_USER_UID -g $DOCKER_USER_GID node
 
 RUN npm install -g pnpm bun
 
