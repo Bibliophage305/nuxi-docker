@@ -4,7 +4,9 @@ services:
     user: "${DOCKER_USER_UID}:${DOCKER_USER_GID}"
     build:
       context: "${DOCKERFILE_DIRECTORY}"
-      dockerfile: "Dockerfile"
+      args:
+        - DOCKER_USER_UID=${DOCKER_USER_UID}
+        - DOCKER_USER_GID=${DOCKER_USER_GID}
     volumes:
       - "${PARENT_DIRECTORY}:/home/node/src"
     command: "npx nuxi init ${PROJECT_DIRECTORY}"

@@ -19,10 +19,12 @@ services:
       - postgres
     links:
       - postgres
-    user: "${DOCKER_USER_ID}:${DOCKER_GROUP_ID}"
+    user: "${DOCKER_USER_UID}:${DOCKER_USER_GID}"
     build:
       context: "${DOCKERFILE_DIRECTORY}"
-      dockerfile: Dockerfile
+      args:
+        - DOCKER_USER_UID=${DOCKER_USER_UID}
+        - DOCKER_USER_GID=${DOCKER_USER_GID}
     tty: true
     ports:
       - "3000:3000"
