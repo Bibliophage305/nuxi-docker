@@ -162,7 +162,7 @@ if (process.argv[2] === "init") {
 
   try {
     execSync(
-      `${env_variables.join(" ")} ${BASE_ARGS.join(" ")} run nuxt-app-init`,
+      `${env_variables.join(" ")} ${BASE_ARGS.join(" ")} run --rm --build nuxt-app-init`,
       { stdio: "inherit" }
     );
   } catch (err) {
