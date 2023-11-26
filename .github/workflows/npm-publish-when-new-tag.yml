@@ -2,10 +2,21 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - "v*"
 
 jobs:
+  tagged-release:
+    permissions: write-all
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+  
   build:
     runs-on: ubuntu-latest
     steps:
@@ -15,7 +26,7 @@ jobs:
           node-version: 16
 
   publish-npm:
-    needs: build
+    needs: [tagged-release, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
