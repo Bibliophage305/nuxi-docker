@@ -1,5 +1,5 @@
 
-name: Node.js Package
+name: Release
 
 on:
   push:
