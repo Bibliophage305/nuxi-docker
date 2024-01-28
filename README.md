@@ -1,6 +1,28 @@
 # Nuxi-Docker
 
-Nuxi-Docker is a preconfigured Docker development environment tailored to streamline interaction with Nuxt.js projects using the Nuxi CLI.
+Nuxi-Docker is a preconfigured Docker development environment for Nuxt.js projects, with a drop-in replacement for the Nuxi CLI.
+
+Inspired by [Laravel Sail](https://laravel.com/docs/8.x/sail) and [Vessel](https://vessel.shippingdocker.com/).
+
+## Quick Start
+
+Create a new Nuxt.js project:
+
+```bash
+npx nuxi-docker init my-project
+```
+
+Bring up the Docker environment:
+
+```bash
+npx nuxi-docker up -d
+```
+
+Use `nuxi-docker` as a drop-in replacement for `nuxi`:
+
+```bash
+npx nuxi-docker dev
+```
 
 ## Installation
 
@@ -25,6 +47,14 @@ npx nuxi-docker install
 This command sets up the necessary configurations and Docker environment within your current Nuxt project.
 
 ## Usage
+
+### Starting the Docker Environment
+
+To start the Docker environment:
+
+```bash
+npx nuxi-docker up -d
+```
 
 ### Commands Proxied to Nuxi
 
