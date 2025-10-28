@@ -90,8 +90,8 @@ const DOCKERFILE_DIRECTORY = path.join(__dirname, "docker");
 
 const env_variables = [
   `DOCKERFILE_DIRECTORY="${DOCKERFILE_DIRECTORY}"`,
-  `DOCKER_USER_UID=$UID`,
-  `DOCKER_USER_GID=$(id -g)`,
+  `DOCKER_USER_UID=${process.getuid()}`,
+  `DOCKER_USER_GID=${process.getgid()}`,
 ];
 
 // install command
