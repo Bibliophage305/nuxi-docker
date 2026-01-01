@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim
+FROM node:25-bullseye-slim
 
 ARG DOCKER_USER_UID
 ARG DOCKER_USER_GID
